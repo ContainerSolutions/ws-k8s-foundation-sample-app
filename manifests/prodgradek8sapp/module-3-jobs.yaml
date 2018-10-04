@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: jobs1
+spec:
+  template:
+    spec:
+      containers:
+      - name: jobs1
+        image: busybox
+        command: ['sh','-c','echo "Kubernetes Production Grade Applications" && sleep 360']
+      restartPolicy: Never
+  backoffLimit: 4
