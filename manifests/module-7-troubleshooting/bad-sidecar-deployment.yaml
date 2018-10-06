@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bad-sidecar
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: sample
+  template:
+    metadata:
+      labels:
+        app: sample
+        tier: backend
+    spec:
+      containers:
+        - name: app
+          image: containersol/k8s-sample-app:3.14159
+          ports:
+            - containerPort: 9292
+          readinessProbe:
+            httpGet:
+              path: /neverready
+              port: 9292
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          livenessProbe:
+            httpGet:
+              path: /brokeness
+              port: 9292
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 5
+        - name: nginx
+          image: nginx:1.15.3-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-config
+              mountPath: /web/404.html
+              subPath: 404.html
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-conf
