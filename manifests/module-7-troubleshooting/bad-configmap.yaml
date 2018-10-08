@@ -23,7 +23,7 @@ data:
         }
 
         location / {
-          proxy_pass http://localhost:9292;
+          proxy_pass http://localhost:19292;
           proxy_intercept_errors on;
         }
 

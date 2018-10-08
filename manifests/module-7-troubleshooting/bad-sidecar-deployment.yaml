@@ -42,8 +42,8 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
             - name: nginx-config
-              mountPath: /web/404.html
-              subPath: 404.html
+              mountPath: /web/error.html
+              subPath: error.html
       volumes:
         - name: nginx-config
           configMap:
