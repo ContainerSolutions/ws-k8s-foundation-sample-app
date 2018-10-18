@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sample
+      tier: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: sample
+        tier: frontend
+    spec:
+      containers:
+        - name: app-frontend
+          image: containersol/sample-k8s-front:0.1
+          ports:
+            - containerPort: 9292
