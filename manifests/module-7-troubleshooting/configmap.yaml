@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    worker_processes 1;
+    error_log /dev/stdout info;
+
+    events {
+      worker_connections 10;
+    }
+
+    http {
+      access_log /dev/stdout;
+
+      server {
+        listen 80;
+
+        error_page 502 404 /error.html;
+        location /error.html {
+          root /web;
+        }
+
+        location / {
+          proxy_pass http://localhost:9292;
+          proxy_intercept_errors on;
+        }
+
+      }
+    }
+  error.html: |
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <h1>Greetings from the Sidecar container</h1>
+        <h2>Something is not right. Check the console of your browser or my logs.<h2>
+        <a href="/">Back!</a>
+        </br>
+        <img src="https://bit.ly/2y5N837" height="484" width="416">
+      </body>
+    </html>
