@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds1
+  labels:
+    app: pause
+spec:
+  selector:
+    matchLabels:
+      app: pause
+  template:
+    metadata:
+      labels:
+        app: pause
+    spec:
+      containers:
+      - name: ds1
+        image: gcr.io/google_containers/pause-amd64:3.0
